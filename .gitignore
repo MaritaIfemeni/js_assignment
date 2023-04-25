@@ -2,6 +2,9 @@
 .env-development
 .env-production
 
+index.html
+style.css
+
 # Logs
 logs
 *.log
