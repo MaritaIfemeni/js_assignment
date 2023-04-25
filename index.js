@@ -87,19 +87,19 @@ to array, and so on.
 
 const generateNewFolderName = (existingFolders) => {
   /*  provide your code here */
-  let newFolder = "New Folder";
-    if (existingFolders.length === 0) {
-        existingFolders.push(newFolder);
-    } else {
-        let lastFolder = existingFolders[existingFolders.length - 1];
-        let lastFolderNumber = lastFolder.match(/\d+/g);
-        if (lastFolderNumber === null) {
-            existingFolders.push(newFolder + " (1)");
-        } else {
-            let newFolderNumber = parseInt(lastFolderNumber) + 1;
-            existingFolders.push(newFolder + " (" + newFolderNumber + ")");
-        }
+  const newFolder = "New Folder";
+  let nextNumber = 0;
+
+  for (let i = 0; i < existingFolders.length; i++) {
+    const folderName = `${newFolder}${nextNumber > 0 ? ` (${nextNumber})` : ""}`;
+    if (existingFolders[i] !== folderName) {
+      existingFolders.splice(i, 0, folderName);
+      return;
     }
+    nextNumber++;
+  }
+
+  existingFolders.push(`${newFolder}${nextNumber > 0 ? ` (${nextNumber})` : ""}`);
 };
 
 let folder = [];
