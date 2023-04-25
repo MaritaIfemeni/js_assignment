@@ -32,7 +32,7 @@ let myArr = [
   "2022-14-12",
 ];
 const fixDate = (array) => {
-  /* provide your code here */
+  /* provide your code here */     // This code does not fix the dates that are in the different order
   let newArr = [];
   for (let i = 0; i < array.length; i++) {
     let date = array[i].split("-");
@@ -91,7 +91,9 @@ const generateNewFolderName = (existingFolders) => {
   let nextNumber = 0;
 
   for (let i = 0; i < existingFolders.length; i++) {
-    const folderName = `${newFolder}${nextNumber > 0 ? ` (${nextNumber})` : ""}`;
+    const folderName = `${newFolder}${
+      nextNumber > 0 ? ` (${nextNumber})` : ""
+    }`;
     if (existingFolders[i] !== folderName) {
       existingFolders.splice(i, 0, folderName);
       return;
@@ -99,7 +101,9 @@ const generateNewFolderName = (existingFolders) => {
     nextNumber++;
   }
 
-  existingFolders.push(`${newFolder}${nextNumber > 0 ? ` (${nextNumber})` : ""}`);
+  existingFolders.push(
+    `${newFolder}${nextNumber > 0 ? ` (${nextNumber})` : ""}`
+  );
 };
 
 let folder = [];
@@ -116,11 +120,22 @@ If the debounced function is called again within the delay time, the timer shoul
 Your solution should be implemented in JavaScript without using any third-party libraries or frameworks. */
 const debounce = (callback, timer) => {
   //Your code goes here
+  let timeoutId = null;
+  return (...args) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      callback.apply(null, args);
+    }, timer);
+  };
 };
 
+const debounceFunction = debounce(
+  () => console.log("this should print out only once"),
+  1000
+);
 //This is the test code for the debounce function
 for (let i = 0; i < 5; i++) {
-  debounce(() => console.log("this should print out only once"), 1000);
+  debounceFunction();
 }
 
 /* 6. Create a function called cacheFunc that takes another function as an argument and returns a new function. 
@@ -129,7 +144,17 @@ If the new function is called with the same arguments again, it should return th
 The new function should have a cache property that stores the cached results. */
 
 const cacheFunc = (callback) => {
-  //Your code goes here
+  const cache = {};
+  return (...args) => {
+    const key = JSON.stringify(args);
+    if (cache[key]) {
+      return cache[key];
+    } else {
+      const result = callback(...args);
+      cache[key] = result;
+      return result;
+    }
+  };
 };
 
 //This is the test code for cacheFunc
@@ -156,17 +181,24 @@ const createRecipe = (name, instructions) => {
   return {
     name,
     instructions,
-    printInstructions: () => {
+    printInstructions() {
       console.log(`Instructions for ${this.name}:`);
       console.log(
-        this.instructions +
-          `for ${this.time} seconds. Contain ${this.calories} calories`
+        `${this.instructions} for ${this.time} seconds. Contain ${this.calories} calories`
       );
     },
   };
 };
 
-const withMetrics = (time, calories) => {};
+const withMetrics = (time, calories) => {
+  return (recipe) => {
+    return {
+      ...recipe,
+      time,
+      calories,
+    };
+  };
+};
 
 const pancakeRecipe = withMetrics(
   30,
